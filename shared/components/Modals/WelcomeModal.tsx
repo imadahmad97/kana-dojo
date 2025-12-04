@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import clsx from 'clsx';
 import {
@@ -14,6 +14,7 @@ import {
   Joystick,
   Dice5
 } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import useOnboardingStore from '@/shared/store/useOnboardingStore';
 import usePreferencesStore from '@/features/Preferences/store/usePreferencesStore';
 import { useClick } from '@/shared/hooks/useAudio';
@@ -23,6 +24,8 @@ import fonts from '@/features/Preferences/data/fonts';
 
 const WelcomeModal = () => {
   const { playClick } = useClick();
+  const pathname = usePathname();
+  const contentRef = useRef<HTMLDivElement>(null);
   const hasSeenWelcome = useOnboardingStore(state => state.hasSeenWelcome);
   const setHasSeenWelcome = useOnboardingStore(
     state => state.setHasSeenWelcome
@@ -51,13 +54,17 @@ const WelcomeModal = () => {
   const [localSilentMode, setLocalSilentMode] = useState(silentMode);
 
   useEffect(() => {
-    if (!hasSeenWelcome) {
+    const isDev = process.env.NODE_ENV === 'development';
+    const isBaseRoute =
+      pathname === '/' || pathname === '/en' || pathname === '/ja';
+
+    if (!hasSeenWelcome || (isDev && isBaseRoute)) {
       const timer = setTimeout(() => {
         setIsVisible(true);
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [hasSeenWelcome]);
+  }, [hasSeenWelcome, pathname]);
 
   useEffect(() => {
     setLocalTheme(selectedTheme);
@@ -65,6 +72,13 @@ const WelcomeModal = () => {
     setLocalDisplayKana(displayKana);
     setLocalSilentMode(silentMode);
   }, [selectedTheme, currentFont, displayKana, silentMode]);
+
+  useEffect(() => {
+    // Reset scroll position when step changes
+    if (contentRef.current) {
+      contentRef.current.scrollTop = 0;
+    }
+  }, [step]);
 
   const handleClose = () => {
     playClick();
@@ -157,7 +171,7 @@ const WelcomeModal = () => {
                     Select Your Font
                   </h3>
                   <p className='text-sm text-[var(--secondary-color)]'>
-                    Choose the perfect font for characters
+                    Choose your perfect font for characters
                   </p>
                 </div>
               </div>
@@ -184,7 +198,7 @@ const WelcomeModal = () => {
                   Display Language
                 </h3>
                 <p className='text-sm text-[var(--secondary-color)]'>
-                  In character selection menus, by default display:
+                  In the character selection menu, for readings, display:
                 </p>
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
                   <button
@@ -500,7 +514,7 @@ const WelcomeModal = () => {
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           className={clsx(
-            'w-full max-w-3xl max-h-[85vh] overflow-y-auto',
+            'w-full md:w-4/5 max-h-[85vh] overflow-y-auto',
             'rounded-2xl bg-[var(--card-color)] m-3',
             'shadow-2xl shadow-black/20',
             cardBorderStyles
@@ -566,7 +580,9 @@ const WelcomeModal = () => {
           </div>
 
           {/* Content */}
-          <div className='p-3 sm:p-5 pb-2'>{renderStepContent()}</div>
+          <div ref={contentRef} className='p-3 sm:p-5 pb-2'>
+            {renderStepContent()}
+          </div>
 
           {/* Actions */}
           {step !== 'complete' && (
