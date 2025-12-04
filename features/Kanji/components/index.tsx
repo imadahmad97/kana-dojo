@@ -41,41 +41,71 @@ const KanjiCards = () => {
     Partial<Record<KanjiLevel, KanjiCollectionMeta>>
   >({});
 
+  // Track cumulative set counts for proper level numbering
+  const [cumulativeCounts, setCumulativeCounts] = useState<
+    Record<KanjiLevel, number>
+  >({ n5: 0, n4: 0, n3: 0, n2: 0, n1: 0 });
+
+  // Load cumulative counts once (lightweight - just needs lengths)
   useEffect(() => {
     let isMounted = true;
 
-    const loadCollections = async () => {
-      // Use cached data service - only fetches if not already cached
-      const results = await Promise.all(
-        levelOrder.map(async level => {
-          const kanji = await kanjiDataService.getKanjiByLevel(level);
-          return { level, kanji };
-        })
-      );
+    const loadCumulativeCounts = async () => {
+      const counts: Record<KanjiLevel, number> = {
+        n5: 0,
+        n4: 0,
+        n3: 0,
+        n2: 0,
+        n1: 0
+      };
+      let cumulative = 0;
 
-      if (!isMounted) return;
+      for (const level of levelOrder) {
+        counts[level] = cumulative;
+        const kanji = await kanjiDataService.getKanjiByLevel(level);
+        cumulative += Math.ceil(kanji.length / 10);
+      }
 
-      const collections: Partial<Record<KanjiLevel, KanjiCollectionMeta>> = {};
-      let cumulativeSets = 0;
-
-      results.forEach(({ level, kanji }) => {
-        collections[level] = {
-          data: kanji,
-          name: level.toUpperCase(),
-          prevLength: cumulativeSets
-        };
-        cumulativeSets += Math.ceil(kanji.length / 10);
-      });
-
-      setKanjiCollections(collections);
+      if (isMounted) {
+        setCumulativeCounts(counts);
+      }
     };
 
-    void loadCollections();
-
+    void loadCumulativeCounts();
     return () => {
       isMounted = false;
     };
   }, []);
+
+  // Only load the currently selected collection (lazy loading)
+  useEffect(() => {
+    let isMounted = true;
+    const level = selectedKanjiCollectionName as KanjiLevel;
+
+    // Skip if already loaded
+    if (kanjiCollections[level]) return;
+
+    const loadSelectedCollection = async () => {
+      const kanji = await kanjiDataService.getKanjiByLevel(level);
+
+      if (!isMounted) return;
+
+      setKanjiCollections(prev => ({
+        ...prev,
+        [level]: {
+          data: kanji,
+          name: level.toUpperCase(),
+          prevLength: cumulativeCounts[level]
+        }
+      }));
+    };
+
+    void loadSelectedCollection();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedKanjiCollectionName, cumulativeCounts, kanjiCollections]);
 
   // Filter state for hiding mastered cards
   const [hideMastered, setHideMastered] = useState(false);

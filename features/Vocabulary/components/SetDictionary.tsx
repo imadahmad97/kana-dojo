@@ -6,12 +6,15 @@ import { IWord } from '@/shared/types/interfaces';
 import { cardBorderStyles } from '@/shared/lib/styles';
 import usePreferencesStore from '@/features/Preferences/store/usePreferencesStore';
 import FuriganaText from '@/shared/components/FuriganaText';
+import { memo } from 'react';
 
 type SetDictionaryProps = {
   words: IWord[];
 };
 
-const SetDictionary = ({ words }: SetDictionaryProps) => {
+const SetDictionary = memo(function SetDictionary({
+  words
+}: SetDictionaryProps) {
   const showKana = usePreferencesStore(state => state.displayKana);
 
   return (
@@ -59,6 +62,6 @@ const SetDictionary = ({ words }: SetDictionaryProps) => {
       })}
     </div>
   );
-};
+});
 
 export default SetDictionary;

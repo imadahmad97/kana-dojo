@@ -50,41 +50,71 @@ const VocabCards = () => {
     Partial<Record<VocabLevel, VocabCollectionMeta>>
   >({});
 
+  // Track cumulative set counts for proper level numbering
+  const [cumulativeCounts, setCumulativeCounts] = useState<
+    Record<VocabLevel, number>
+  >({ n5: 0, n4: 0, n3: 0, n2: 0, n1: 0 });
+
+  // Load cumulative counts once (lightweight - just needs lengths)
   useEffect(() => {
     let isMounted = true;
 
-    const loadCollections = async () => {
-      // Use cached data service - only fetches if not already cached
-      const results = await Promise.all(
-        levelOrder.map(async level => {
-          const words = await vocabDataService.getVocabByLevel(level);
-          return { level, words };
-        })
-      );
+    const loadCumulativeCounts = async () => {
+      const counts: Record<VocabLevel, number> = {
+        n5: 0,
+        n4: 0,
+        n3: 0,
+        n2: 0,
+        n1: 0
+      };
+      let cumulative = 0;
 
-      if (!isMounted) return;
+      for (const level of levelOrder) {
+        counts[level] = cumulative;
+        const words = await vocabDataService.getVocabByLevel(level);
+        cumulative += Math.ceil(words.length / WORDS_PER_SET);
+      }
 
-      const collections: Partial<Record<VocabLevel, VocabCollectionMeta>> = {};
-      let cumulativeSets = 0;
-
-      results.forEach(({ level, words }) => {
-        collections[level] = {
-          data: words,
-          name: vocabCollectionNames[level],
-          prevLength: cumulativeSets
-        };
-        cumulativeSets += Math.ceil(words.length / WORDS_PER_SET);
-      });
-
-      setVocabCollections(collections);
+      if (isMounted) {
+        setCumulativeCounts(counts);
+      }
     };
 
-    void loadCollections();
-
+    void loadCumulativeCounts();
     return () => {
       isMounted = false;
     };
   }, []);
+
+  // Only load the currently selected collection (lazy loading)
+  useEffect(() => {
+    let isMounted = true;
+    const level = selectedVocabCollectionName as VocabLevel;
+
+    // Skip if already loaded
+    if (vocabCollections[level]) return;
+
+    const loadSelectedCollection = async () => {
+      const words = await vocabDataService.getVocabByLevel(level);
+
+      if (!isMounted) return;
+
+      setVocabCollections(prev => ({
+        ...prev,
+        [level]: {
+          data: words,
+          name: vocabCollectionNames[level],
+          prevLength: cumulativeCounts[level]
+        }
+      }));
+    };
+
+    void loadSelectedCollection();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedVocabCollectionName, cumulativeCounts, vocabCollections]);
 
   const selectedCollectionKey = selectedVocabCollectionName as VocabLevel;
   const selectedVocabCollection = vocabCollections[selectedCollectionKey];

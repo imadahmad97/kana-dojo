@@ -6,12 +6,15 @@ import type { IKanjiObj } from '@/features/Kanji/store/useKanjiStore';
 import usePreferencesStore from '@/features/Preferences/store/usePreferencesStore';
 import FuriganaText from '@/shared/components/FuriganaText';
 import { useClick } from '@/shared/hooks/useAudio';
+import { memo } from 'react';
 
 type KanjiSetDictionaryProps = {
   words: IKanjiObj[];
 };
 
-const KanjiSetDictionary = ({ words }: KanjiSetDictionaryProps) => {
+const KanjiSetDictionary = memo(function KanjiSetDictionary({
+  words
+}: KanjiSetDictionaryProps) {
   const { playClick } = useClick();
   const showKana = usePreferencesStore(state => state.displayKana);
 
@@ -140,6 +143,6 @@ const KanjiSetDictionary = ({ words }: KanjiSetDictionaryProps) => {
       ))}
     </div>
   );
-};
+});
 
 export default KanjiSetDictionary;
