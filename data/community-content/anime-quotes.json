@@ -168,5 +168,26 @@
     "romaji": "Rero rero rero rero",
     "english": "Rero rero rero rero."
   }
-}
+},
+  {
+    "japanese": "破壊",
+    "romaji": "Hakai!",
+    "english": "Hakai!",
+    "anime": "Dragon Ball Super",
+    "character": "Beerus"
+  },
+  {
+    "japanese": "8000以上だ",
+    "romaji": "Hassen ijō da",
+    "english": "It's over 9000!",
+    "anime": "Dragon Ball Z",
+    "character": "Vegeta"
+  },
+  {
+    "japanese": "きさまら、恐怖という感情を持たんのか?",
+    "romaji": "Kisama-ra, kyōfu to iu kanjō o motan no ka?",
+    "english": "Does a machine like yourself ever experience fear?",
+    "anime": "Dragon Ball Z",
+    "character": "Vegeta"
+  }
 ]
