@@ -154,6 +154,12 @@
     "correctIndex": 0
   },
   {
+    "question": "Which Japanese dish is made with buckwheat noodles?",
+    "difficulty": "easy",
+    "answers": ["Soba", "Udon", "Ramen", "Somem"],
+    "correctIndex": 0
+  },
+  {
     "question": "Which Japanese city is known for the famous bamboo grove?",
     "difficulty": "easy",
     "answers": ["Kyoto", "Tokyo", "Sapporo", "Fukuoka"],
@@ -162,56 +168,31 @@
   {
     "question": "Which Japanese art form involves arranging flowers?",
     "difficulty": "easy",
-    "answers": [
-      "Ikebana",
-      "Origami",
-      "Ukiyo-e",
-      "Shodo"
-    ],
+    "answers": ["Ikebana", "Origami", "Ukiyo-e", "Shodo"],
     "correctIndex": 0
   },
   {
-  "question": "Which city is famous for the Gion Matsuri festival?",
-  "difficulty": "easy",
-  "answers": [
-    "Kyoto",
-    "Sendai",
-    "Sapporo",
-    "Kobe"
-  ],
-  "correctIndex": 0
-},
-{
-  "question": "What is the Japanese term for a traditional inn?",
-  "difficulty": "easy",
-  "answers": [
-    "Ryokan",
-    "Minshuku",
-    "Izakaya",
-    "Yatai"
-  ],
-  "correctIndex": 0
+    "question": "Which city is famous for the Gion Matsuri festival?",
+    "difficulty": "easy",
+    "answers": ["Kyoto", "Sendai", "Sapporo", "Kobe"],
+    "correctIndex": 0
+  },
+  {
+    "question": "What is the Japanese term for a traditional inn?",
+    "difficulty": "easy",
+    "answers": ["Ryokan", "Minshuku", "Izakaya", "Yatai"],
+    "correctIndex": 0
   },
   {
     "question": "Which Japanese city is famous for the floating torii gate at Itsukushima Shrine? (Community variation 1)",
     "difficulty": "easy",
-    "answers": [
-      "Kyoto",
-      "Hiroshima",
-      "Nagasaki",
-      "Kanazawa"
-    ],
+    "answers": ["Kyoto", "Hiroshima", "Nagasaki", "Kanazawa"],
     "correctIndex": 1
   },
   {
-  "question": "What is the name of the bullet train network in Japan? (Community variation 2)",
-  "difficulty": "easy",
-  "answers": [
-    "Shinkansen",
-    "Metro Line",
-    "Skyrail",
-    "Kairo"
-  ],
-  "correctIndex": 0
-}
+    "question": "What is the name of the bullet train network in Japan? (Community variation 2)",
+    "difficulty": "easy",
+    "answers": ["Shinkansen", "Metro Line", "Skyrail", "Kairo"],
+    "correctIndex": 0
+  }
 ]
