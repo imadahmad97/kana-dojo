@@ -1075,37 +1075,7 @@ jobs:
               const instructions = t.buildInstructions(tmpl.file, tmpl.itemType, tmpl.prTitle).map((instr, i) => `${i + 1}. ${instr.replace(/{id}/g, item.id)}`);
               const codeBlock = `\`\`\`json\n{\n  "wrong": "${item.wrong}",\n  "correct": "${item.correct}",\n  "explanation": "${item.explanation}"\n}\n\`\`\``;
 
-              issueBody = `${tmpl.header}
-
-**Category:** ${tmpl.category}  
-**Difficulty:** ${common.difficulty}  
-**Estimated Time:** ${tmpl.estimatedTime}
-
----
-
-### Your Task
-
-${tmpl.taskDescription}
-
-${tmpl.mistakeHeader}
-
-**Wrong:** ${item.wrong}
-
-**Correct:** ${item.correct}
-
-> **Why:** ${item.explanation}
-
-${common.instructionsHeader}
-
-${instructions.slice(0, 5).join('\n')}
-
-${codeBlock}
-
-${instructions.slice(5).join('\n')}
-
----
-
-${common.footer}`;
+              issueBody = `${tmpl.header}\n\n**Category:** ${tmpl.category}  \n**Difficulty:** ${common.difficulty}  \n**Estimated Time:** ${tmpl.estimatedTime}\n\n---\n\n### Your Task\n\n${tmpl.taskDescription}\n\n${tmpl.mistakeHeader}\n\n**Wrong:** ${item.wrong}\n\n**Correct:** ${item.correct}\n\n> **Why:** ${item.explanation}\n\n${common.instructionsHeader}\n\n${instructions.slice(0, 5).join('\n')}\n\n${codeBlock}\n\n${instructions.slice(5).join('\n')}\n\n---\n\n${common.footer}`;
 
               const mistakeIndex = commonMistakes.findIndex(function(m) { return m.id === item.id; });
               commonMistakes[mistakeIndex].issued = true;
