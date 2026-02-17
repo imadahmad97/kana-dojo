@@ -420,15 +420,21 @@
     "secondaryColor": "oklch(75.0% 0.145 350.0 / 1)"
   },
   {
-  "id": "starry-tanabata",
-  "backgroundColor": "oklch(15.0% 0.048 275.0 / 1)",
-  "mainColor": "oklch(88.0% 0.125 255.0 / 1)",
-  "secondaryColor": "oklch(78.0% 0.165 330.0 / 1)"
+    "id": "starry-tanabata",
+    "backgroundColor": "oklch(15.0% 0.048 275.0 / 1)",
+    "mainColor": "oklch(88.0% 0.125 255.0 / 1)",
+    "secondaryColor": "oklch(78.0% 0.165 330.0 / 1)"
   },
   {
     "id": "mochi-pastel",
     "backgroundColor": "oklch(94.0% 0.028 340.0 / 1)",
     "mainColor": "oklch(72.0% 0.145 345.0 / 1)",
     "secondaryColor": "oklch(75.0% 0.125 155.0 / 1)"
+  },
+  {
+    "id": "natto-brown",
+    "backgroundColor": "oklch(22.0% 0.032 60.0 / 1)",
+    "mainColor": "oklch(58.0% 0.095 65.0 / 1)",
+    "secondaryColor": "oklch(70.0% 0.075 55.0 / 1)"
   }
 ]
